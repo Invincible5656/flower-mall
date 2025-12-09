@@ -22,9 +22,17 @@
     <select id="find" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from flowers
-        where name like concat('%', #{searchKey}, '%')
-        and species_name like concat('%', #{searchType}, '%')
-        and state = 1
+        <where>
+            <!-- 只有参数不为空时，才拼接查询条件 -->
+            <if test="searchKey != null and searchKey != ''">
+                and name like concat('%', #{searchKey}, '%')
+            </if>
+            <if test="searchType != null and searchType != ''">
+                and species_name like concat('%', #{searchType}, '%')
+            </if>
+            <!-- 假设业务逻辑只查上架的 -->
+            and state = 1
+        </where>
     </select>
 
     <!-- FindAll -->
@@ -69,6 +77,12 @@
         insert into flowers(name, species_name, price, detail, state)
         values(#{name}, #{speciesName}, #{price}, #{detail}, 1)
     </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT *
+        FROM flowers
+        WHERE id = #{id}
+    </select>
 
 </mapper>
 

@@ -9,11 +9,14 @@
     <file url="file://$PROJECT_DIR$/flower-mall-domain/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-infrastructure/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-infrastructure/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flower-mall-start/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flower-mall-start/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-trigger/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-trigger/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-types/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flower-mall-types/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file:///src/main/resources" charset="UTF-8" />
   </component>
 </project>

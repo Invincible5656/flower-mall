@@ -31,7 +31,7 @@ public interface IFlowerRepository {
      * 根据ID查找
      * 作用：修改数据前，必须先把它查出来，修改完属性后，再调 save()
      */
-    FlowerEntity findById (int id);
+    FlowerEntity findById (Integer id);
 
     /**
      * 列表查询

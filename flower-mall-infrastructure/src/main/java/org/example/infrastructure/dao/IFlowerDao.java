@@ -21,20 +21,22 @@ public interface IFlowerDao {
     List<Flower> findAll(@Param("searchKey") String searchKey);
 
     // queryPrice
-    Float queryPrice(@Param("id") Long id);
+    Float queryPrice(@Param("id") Integer id);
 
     // update
     int update(Flower flowerPO);
 
     // updateImg
-    int updateImg(@Param("imgGuid") String imgGuid, @Param("id") Long id);
+    int updateImg(@Param("imgGuid") String imgGuid, @Param("id") Integer id);
 
     // changeState
     int changeState(Flower flowerPO);
 
     // delete
-    int delete(@Param("id") Long id);
+    int delete(@Param("id") Integer id);
 
     // add
     int insert(Flower flowerPO);
+
+    Flower selectById(@Param("id") Integer id);
 }

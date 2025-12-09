@@ -32,10 +32,17 @@
             <groupId>org.example</groupId>
             <artifactId>flower-mall-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>flower-mall-types</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>flower-mall-domain</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>flower-mall-domain</artifactId>

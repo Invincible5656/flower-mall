@@ -82,11 +82,12 @@
         <!-- 工程模块；启动依赖 trigger->domain, infrastructure-->
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>flower-mall-trigger</artifactId>
+            <artifactId>flower-mall-infrastructure</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>flower-mall-infrastructure</artifactId>
+            <artifactId>flower-mall-trigger</artifactId>
         </dependency>
     </dependencies>
 
@@ -127,7 +128,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.example.Application</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlowerEntity {
-    private int id;
+    private Integer id;
 
     private String name;
     // 分类名称
