@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.infrastructure.dao.IFlowerDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="org.example.infrastructure.dao.po.Flower">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="species_name" property="speciesName" />
+        <result column="price" property="price" />
+        <result column="detail" property="detail" />
+        <result column="state" property="state" />
+        <result column="img_guid" property="imgGuid" />
+    </resultMap>
+
+    <!-- 通用列片段，方便复用 -->
+    <sql id="Base_Column_List">
+        id, name, species_name, price, detail, state, img_guid
+    </sql>
+
+    <!-- Find -->
+    <select id="find" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from flowers
+        where name like concat('%', #{searchKey}, '%')
+        and species_name like concat('%', #{searchType}, '%')
+        and state = 1
+    </select>
+
+    <!-- FindAll -->
+    <select id="findAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from flowers
+        where name like concat('%', #{searchKey}, '%')
+    </select>
+
+    <!-- QueryPrice -->
+    <select id="queryPrice" resultType="java.lang.Float">
+        select price from flowers where id = #{id}
+    </select>
+
+    <!-- Update: 注意 #{} 里面要填 PO 类的属性名，不是数据库字段名 -->
+    <update id="update" parameterType="org.example.infrastructure.dao.po.Flower">
+        update flowers
+        set name = #{name},
+            species_name = #{speciesName},
+            price = #{price},
+            detail = #{detail}
+        where id = #{id}
+    </update>
+
+    <!-- UpdateImg -->
+    <update id="updateImg">
+        update flowers set img_guid = #{imgGuid} where id = #{id}
+    </update>
+
+    <!-- ChangeState: ！！！重要修复：原代码用了 ${state} 是注入漏洞，已改为 #{state} -->
+    <update id="changeState" parameterType="org.example.infrastructure.dao.po.Flower">
+        update flowers set state = #{state} where id = #{id}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete">
+        delete from flowers where id = #{id}
+    </delete>
+
+    <!-- Insert: ！！！重要修复：原代码用了 ${price}，已改为 #{price} -->
+    <insert id="insert" parameterType="org.example.infrastructure.dao.po.Flower" useGeneratedKeys="true" keyProperty="id">
+        insert into flowers(name, species_name, price, detail, state)
+        values(#{name}, #{speciesName}, #{price}, #{detail}, 1)
+    </insert>
+
+</mapper>
+
