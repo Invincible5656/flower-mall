@@ -34,7 +34,7 @@
     <!-- 对应 update -->
     <update id="update" parameterType="org.example.infrastructure.dao.po.User">
         update users
-        set name = #{ame},
+        set name = #{name},
             password = #{password},
             phone = #{phone},
             address = #{address}

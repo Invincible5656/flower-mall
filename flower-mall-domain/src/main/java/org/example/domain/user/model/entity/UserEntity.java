@@ -27,17 +27,20 @@ public class UserEntity {
 
     private String role;
 
-    /**
-     * 校验密码
-     */
-    public boolean matchPassword(String inputPassword) {
-        return this.password.equals(inputPassword);
+    // 业务行为：校验密码
+    public boolean checkPassword(String inputPassword) {
+        return this.password != null && this.password.equals(inputPassword);
     }
 
-    /**
-     * 修改个人信息
-     */
-    public void changeInfo(String phone, String address) {
+    // 业务行为：初始化普通用户
+    public void initAsNormalUser() {
+        this.role = "user";
+    }
+
+    // 业务行为：更新信息
+    public void updateInfo(String name, String password, String phone, String address) {
+        this.name = name;
+        this.password = password;
         this.phone = phone;
         this.address = address;
     }
