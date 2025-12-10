@@ -38,11 +38,4 @@ public interface IFlowerRepository {
      * 对应原接口的：find 和 findAll
      */
     List<FlowerEntity> queryList(String searchKey, String searchType);
-
-
-
-
-
-
-
 }
