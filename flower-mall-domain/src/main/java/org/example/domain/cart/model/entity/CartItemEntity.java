@@ -49,4 +49,8 @@ public class CartItemEntity {
     public void initId(Integer id) {
         this.id = id;
     }
+
+    public void updatePrice(Float newPrice) {
+        this.price = newPrice;
+    }
 }

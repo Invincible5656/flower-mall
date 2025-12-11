@@ -21,7 +21,7 @@ public interface ICartDao {
     int insert(Cart cartPO);
 
     // 3. 更新一条记录 (通常只更新数量)
-    int updateAmount(Cart cartPO);
+    int updateItem(Cart cartPO);    // 新的
 
     // 删除
     int deleteById(@Param("id") Integer id);

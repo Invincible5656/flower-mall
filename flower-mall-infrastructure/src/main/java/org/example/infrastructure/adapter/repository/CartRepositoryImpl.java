@@ -45,7 +45,7 @@ public class CartRepositoryImpl implements ICartRepository {
                 item.initId(po.getId());
             } else {
                 // --- 更新逻辑 ---
-                cartDao.updateAmount(po);
+                cartDao.updateItem(po);
             }
         }
     }

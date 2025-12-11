@@ -32,10 +32,11 @@
         values (#{fid}, #{flower}, #{amount}, #{price}, #{uid})
     </insert>
 
-    <!-- 3. 更新数量 (Repository更新旧Item用) -->
-    <update id="updateAmount" parameterType="org.example.infrastructure.dao.po.Cart">
+    <!-- 3. 更新 (Repository更新旧Item用) -->
+    <update id="updateItem" parameterType="org.example.infrastructure.dao.po.Cart">
         update carts
-        set amount = #{amount}
+        set amount = #{amount},
+        price = #{price}  <!-- ✅ 加上这一行 -->
         where id = #{id}
     </update>
 
