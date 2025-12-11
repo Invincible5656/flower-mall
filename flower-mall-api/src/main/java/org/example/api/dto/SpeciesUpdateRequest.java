@@ -1,4 +1,4 @@
-package org.example.infrastructure.dao.po;
+package org.example.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +7,12 @@ import lombok.NoArgsConstructor;
 /**
  * @author lanjiajun
  * @description
- * 花品种PO，对应数据库表species
- * @create 2025-12-09 09:41
+ * @create 2025-12-11 19:56
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Species {
+public class SpeciesUpdateRequest {
     private Integer id;
-
-    private String speciesName;
+    private String name;
 }
