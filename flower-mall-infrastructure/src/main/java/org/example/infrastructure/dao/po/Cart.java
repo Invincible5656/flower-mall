@@ -14,11 +14,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
-    private int id;
-    private int fid;
+
+    private Integer id;
+
+    private Integer fid;
+
     private String flower;
-    private int amount;
+
+    private Integer amount;
+
     private float price;
-    private int uid;
-    private String account;
+
+    private Integer uid;
 }
