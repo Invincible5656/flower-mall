@@ -8,42 +8,41 @@ import java.time.LocalDateTime;
 
 /**
  * @author lanjiajun
- * @description 订单主表
- * 对应数据库orders表
+ * @description 订单项表
+ * 对应数据库order_items表
  * @create 2025-12-11 15:55
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class OrderItem {
     /** 自增主键ID (对应 id) */
     private Long id;
 
     /** 业务订单号 (对应 order_id) */
     private String orderId;
 
-    /** 用户ID (对应 user_id) */
-    private Integer userId;
+    /** 商品ID (对应 flower_id) */
+    private Integer flowerId;
 
-    /** 订单总金额 (对应 total_amount) */
-    private Float totalAmount;
+    /** 商品名称快照 (对应 flower_name) */
+    private String flowerName;
 
-    /** 订单状态 (对应 status) */
-    private Integer status;
+    /** 下单时单价快照 (对应 price) */
+    private Float price;
 
-    /** 收货人姓名 (对应 receiver_name) */
-    private String receiverName;
+    /** 购买数量 (对应 quantity) */
+    private Integer quantity;
 
-    /** 收货人电话 (对应 receiver_phone) */
-    private String receiverPhone;
-
-    /** 收货地址 (对应 address) */
-    private String address;
+    /** 该项小计 (对应 sub_total) */
+    private Float subTotal;
 
     /** 创建时间 (对应 create_time) */
     private LocalDateTime createTime;
 
     /** 更新时间 (对应 update_time) */
     private LocalDateTime updateTime;
+
+
 
 }

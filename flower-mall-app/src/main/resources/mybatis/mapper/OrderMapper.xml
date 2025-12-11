@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.infrastructure.dao.IOrderDao">
+
+    <resultMap id="OrderResultMap" type="org.example.infrastructure.dao.po.Order">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="user_id" property="userId" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="status" property="status" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_phone" property="receiverPhone" />
+        <result column="address" property="address" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- OrderItemPO ResultMap -->
+    <resultMap id="OrderItemResultMap" type="org.example.infrastructure.dao.po.OrderItem">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="flower_id" property="flowerId" />
+        <result column="flower_name" property="flowerName" />
+        <result column="price" property="price" />
+        <result column="quantity" property="quantity" />
+        <result column="sub_total" property="subTotal" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 插入主表，并回填自增ID -->
+    <insert id="insertOrder" parameterType="org.example.infrastructure.dao.po.Order"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders(order_id, user_id, total_amount, status, receiver_name, receiver_phone, address, create_time, update_time)
+        VALUES(#{orderId}, #{userId}, #{totalAmount}, #{status}, #{receiverName}, #{receiverPhone}, #{address}, NOW(), NOW())
+    </insert>
+
+    <!-- 批量插入子表 -->
+    <insert id="insertOrderItems">
+        INSERT INTO order_items(order_id, flower_id, flower_name, price, quantity, sub_total, create_time, update_time)
+        VALUES
+        <foreach collection="items" item="item" separator=",">
+            (#{item.orderId}, #{item.flowerId}, #{item.flowerName}, #{item.price}, #{item.quantity}, #{item.subTotal}, NOW(), NOW())
+        </foreach>
+    </insert>
+
+    <!-- 查询主表 -->
+    <select id="selectByOrderId" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 查询子表 -->
+    <select id="selectItemsByOrderId" resultMap="OrderItemResultMap">
+        SELECT * FROM order_items WHERE order_id = #{orderId}
+    </select>
+
+</mapper>
