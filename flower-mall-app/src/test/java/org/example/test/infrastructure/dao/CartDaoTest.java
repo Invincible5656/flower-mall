@@ -52,7 +52,7 @@ public class CartDaoTest {
 
         // 4. 测试更新 (数量变 5)
         cartPO.setAmount(5);
-        int updateCount = cartDao.updateAmount(cartPO);
+        int updateCount = cartDao.updateItem(cartPO);
         log.info("更新结果行数: {}", updateCount);
         Assert.assertEquals(1, updateCount);
 
