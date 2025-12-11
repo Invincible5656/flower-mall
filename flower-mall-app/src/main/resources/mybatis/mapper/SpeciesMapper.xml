@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.infrastructure.dao.ISpeciesDao">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="org.example.infrastructure.dao.po.Species">
+        <id column="id" property="id" />
+        <result column="species_name" property="speciesName" />
+    </resultMap>
+
+    <insert id="insert" parameterType="org.example.infrastructure.dao.po.Species"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO species (species_name)
+        VALUES (#{speciesName})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="org.example.infrastructure.dao.po.Species">
+        UPDATE species
+        SET species_name = #{speciesName}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteById">
+        DELETE FROM species WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID查找 -->
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT id, species_name FROM species WHERE id = #{id}
+    </select>
+
+    <!-- 列表查询 (支持模糊搜索) -->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT id, species_name FROM species
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                species_name LIKE concat('%', #{searchKey}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
