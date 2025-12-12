@@ -26,10 +26,11 @@ public class JwtUtil {
      * @param username 用户名
      * @return String
      */
-    public String createToken(String userId, String username) {
+    public String createToken(String userId, String username,String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("username", username);
+        claims.put("role", role);
 
         JwtBuilder builder = Jwts.builder()
                 .setClaims(claims)

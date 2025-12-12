@@ -6,6 +6,7 @@ import org.example.api.dto.FlowerUpdateRequest;
 import org.example.api.response.Result;
 import org.example.domain.flower.model.entity.FlowerEntity;
 import org.example.domain.flower.service.FlowerApplicationService;
+import org.example.types.Annotaton.AdminOnly;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ public class FlowerController {
      * 新增鲜花
      * POST /api/flower/add
      */
+    @AdminOnly
     @PostMapping("/add")
     public Result<String> add(@RequestBody FlowerAddRequest flowerAddRequest) {
         log.info("接收到新增鲜花请求：{}", flowerAddRequest.getName());
@@ -48,6 +50,7 @@ public class FlowerController {
     /**
      * 修改鲜花信息
      */
+    @AdminOnly
     @PostMapping("/update")
     public Result<Void> update(@RequestBody FlowerUpdateRequest request) {
         log.info("接收到修改鲜花请求: id={}", request.getId());
@@ -64,6 +67,7 @@ public class FlowerController {
     /**
      * 单独修改图片
      */
+    @AdminOnly
     @PostMapping("/update/image")
     public Result<Void> updateImage(@RequestParam Long id, @RequestParam String imgGuid) {
         flowerApplicationService.updateFlowerImage(id, imgGuid);
@@ -73,6 +77,7 @@ public class FlowerController {
     /**
      * 删除鲜花
      */
+    @AdminOnly
     @PostMapping("/delete") // 或者用 @DeleteMapping("/{id}")
     public Result<Void> delete(@RequestParam Integer id) {
         log.info("接收到删除鲜花请求：{}", id);

@@ -18,7 +18,6 @@
     <select id="find" resultMap="BaseResultMap">
         select * from users
         where (account like concat('%',#{searchKey},'%') or name like concat('%',#{searchKey},'%'))
-          and role = 'user'
     </select>
 
     <!-- 对应 queryById -->
@@ -28,7 +27,7 @@
 
     <!-- 对应 queryInfo -->
     <select id="queryInfo" resultMap="BaseResultMap">
-        select * from users where account = #{account} and role = 'user'
+        select * from users where account = #{account}
     </select>
 
     <!-- 对应 update -->

@@ -51,13 +51,13 @@ public class UserApplicationService {
         }
 
         // 5. 生成 JWT Token
-        // 假设你的 createToken 方法接收 (userId, username)
-        // 注意：userId 转为 String
-        String token = jwtUtil.createToken(user.getId().toString(), user.getAccount());
+        String token = jwtUtil.createToken(
+                user.getId().toString(),
+                user.getAccount(), // 这里的 Account 就是用户名
+                user.getRole()
+        );
 
         // 6. 构建返回结果
-        // 注意：为了安全，返回给前端的用户信息最好不要包含 password
-        // 如果 UserEntity 不方便修改，可以在这里手动设为 null (仅影响返回的内存对象，不影响数据库)
         user.setPassword(null);
 
         return new UserLoginEntity(token, user);

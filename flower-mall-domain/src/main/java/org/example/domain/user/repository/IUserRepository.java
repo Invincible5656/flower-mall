@@ -27,7 +27,6 @@ public interface IUserRepository {
 
     /**
      * 根据账号查询详情
-     * 对应原 Service 的：queryInfo
      */
     UserEntity findByAccount(String account);
 
@@ -40,8 +39,4 @@ public interface IUserRepository {
      * 列表搜索
      */
     List<UserEntity> search(String searchKey);
-
-
-
-
 }

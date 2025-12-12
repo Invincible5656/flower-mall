@@ -1,5 +1,6 @@
 package org.example.trigger.http.interceptor;
 
+import io.jsonwebtoken.Claims;
 import lombok.var;
 import org.example.types.common.UserContext;
 import org.example.types.enums.ResponseCode;
@@ -32,18 +33,21 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 简单判断
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AppException(ResponseCode.UNAUTHORIZED.getCode(), "未登录或Token缺失");
-            // 或者直接 response.setStatus(401) 并 return false;
         }
 
         String token = authHeader.substring(7); // 去掉 "Bearer "
 
         // 2. 校验并解析
         try {
-            var claims = jwtUtil.parseToken(token);
+            Claims claims = jwtUtil.parseToken(token);
             String userId = (String) claims.get("userId");
+            String username = (String) claims.get("username");
+            String role = (String) claims.get("role");
+
+            System.out.println(">>> 拦截器解析Token: userId=" + userId + ", role=" + role);
 
             // 3. 存入 ThreadLocal 上下文
-            UserContext.setUserId(userId);
+            UserContext.set(userId, username, role);
             return true;
         } catch (Exception e) {
             throw new AppException(ResponseCode.UNAUTHORIZED.getCode(), "Token无效或已过期");

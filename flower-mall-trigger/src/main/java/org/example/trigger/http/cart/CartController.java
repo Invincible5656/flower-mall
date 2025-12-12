@@ -5,6 +5,7 @@ import org.example.api.dto.CartAddRequest;
 import org.example.api.response.Result;
 import org.example.domain.cart.model.aggregate.CartAggregate;
 import org.example.domain.cart.service.CartApplicationService;
+import org.example.types.common.UserContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,14 +29,22 @@ public class CartController {
      */
     @PostMapping("/add")
     public Result<Void> add(@RequestBody CartAddRequest request) {
+        // 1. 【核心修改】从 Token 上下文获取当前用户ID
+        String userIdStr = UserContext.getUserId();
+        if (userIdStr == null) return Result.error("4001", "未登录");
+
+        Integer currentUserId = Integer.parseInt(userIdStr);
+        // 日志中要记录的是“当前登录人”，而不是“请求体里的人”！
         log.info(">>> 收到[添加购物车]请求: userId={}, flowerId={}, count={}",
-                request.getUserId(), request.getFlowerId(), request.getCount());
+                currentUserId, request.getFlowerId(), request.getCount());
 
         long start = System.currentTimeMillis();
 
         try {
+            // 2. 调用 Service，传入 Token 解析出的 ID
+            // request.getUserId() 已经被无视，前端传什么都没用
             cartService.addToCart(
-                    request.getUserId(),
+                    currentUserId,
                     request.getFlowerId(),
                     request.getCount()
             );
@@ -53,16 +62,22 @@ public class CartController {
      * 查看购物车列表
      */
     @GetMapping("/list")
-    public Result<CartAggregate> list(@RequestParam Integer userId) {
-        log.info(">>> 收到[查询购物车]请求: userId={}", userId);
+    public Result<CartAggregate> list() {
+        // 1. 【核心修改】直接获取当前用户ID
+        String userIdStr = UserContext.getUserId();
+        if (userIdStr == null) return Result.error("4001", "未登录");
 
-        CartAggregate cart = cartService.getMyCart(userId);
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        log.info(">>> 收到[查询购物车]请求: userId={}", currentUserId);
+
+        // 2. 查询自己的购物车
+        CartAggregate cart = cartService.getMyCart(currentUserId);
 
         int itemCount = (cart != null && cart.getItems() != null) ? cart.getItems().size() : 0;
 
-        log.info("<<< [查询购物车]返回成功: userId={}, 包含商品数={}", userId, itemCount);
+        log.info("<<< [查询购物车]返回成功: userId={}, 包含商品数={}", currentUserId, itemCount);
 
         return Result.success(cart);
     }
 }
-

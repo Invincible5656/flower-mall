@@ -6,6 +6,7 @@ import org.example.api.dto.SpeciesUpdateRequest;
 import org.example.api.response.Result;
 import org.example.domain.flower.model.entity.SpeciesEntity;
 import org.example.domain.flower.service.SpeciesApplicationService;
+import org.example.types.Annotaton.AdminOnly;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ public class SpeciesController {
     /**
      * 新增品类
      */
+    @AdminOnly
     @PostMapping("/create")
     public Result<Void> create(@RequestBody SpeciesCreateRequest request) {
         log.info(">>> 收到[新增品类]请求: name={}", request.getName());
@@ -43,6 +45,7 @@ public class SpeciesController {
     /**
      * 修改品类
      */
+    @AdminOnly
     @PostMapping("/update")
     public Result<Void> update(@RequestBody SpeciesUpdateRequest request) {
         log.info(">>> 收到[修改品类]请求: id={}, name={}", request.getId(), request.getName());
@@ -58,6 +61,7 @@ public class SpeciesController {
     /**
      * 删除品类
      */
+    @AdminOnly
     @DeleteMapping("/delete")
     public Result<Void> delete(@RequestParam("id") Integer id) {
         log.info(">>> 收到[删除品类]请求: id={}", id);

@@ -8,6 +8,7 @@ import org.example.api.response.Result;
 import org.example.domain.user.model.entity.UserEntity;
 import org.example.domain.user.model.entity.UserLoginEntity;
 import org.example.domain.user.service.UserApplicationService;
+import org.example.types.Annotaton.AdminOnly;
 import org.example.types.common.UserContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,10 @@ public class UserController {
         try {
             // 调用领域服务，这里假设 login 只需要账号密码
             // 如果你的 Service 需要 Entity，这里就转成 Entity
-            UserLoginEntity response = userDomainService.login(request.getAccount(), request.getPassword(), "user");
+            UserLoginEntity response = userDomainService
+                    .login(request.getAccount(),
+                            request.getPassword(),
+                            request.getRole());
             log.info("【用户登录】成功: account={}", request.getAccount());
             return Result.success(response);
         } catch (Exception e) {
