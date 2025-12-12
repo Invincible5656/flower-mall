@@ -6,7 +6,9 @@ import org.example.api.dto.UserRegisterRequest;
 import org.example.api.dto.UserUpdateRequest;
 import org.example.api.response.Result;
 import org.example.domain.user.model.entity.UserEntity;
+import org.example.domain.user.model.entity.UserLoginEntity;
 import org.example.domain.user.service.UserApplicationService;
+import org.example.types.common.UserContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,16 +32,16 @@ public class UserController {
      * 登录接口
      */
     @PostMapping("/login")
-    public Result<UserEntity> login(@RequestBody UserLoginRequest request) {
+    public Result<UserLoginEntity> login(@RequestBody UserLoginRequest request) {
 
         log.info("【用户登录】收到请求: account={}", request.getAccount());
 
         try {
             // 调用领域服务，这里假设 login 只需要账号密码
             // 如果你的 Service 需要 Entity，这里就转成 Entity
-            UserEntity user = userDomainService.login(request.getAccount(), request.getPassword(), "user");
-            log.info("【用户登录】成功: id={}, account={}", user.getId(), user.getAccount());
-            return Result.success(user);
+            UserLoginEntity response = userDomainService.login(request.getAccount(), request.getPassword(), "user");
+            log.info("【用户登录】成功: account={}", request.getAccount());
+            return Result.success(response);
         } catch (Exception e) {
             log.error("【用户登录】失败: account={}, cause={}", request.getAccount(), e.getMessage());
             return Result.error("4000", e.getMessage());
@@ -74,13 +76,30 @@ public class UserController {
 
     /**
      * 更新接口
+     * 从 UserContext.getUserId() 获取当前用户ID，
+     * 防止用户恶意修改 request.getId() 来更新别人的信息。
+     *（测试的时候发现这种问题了，立刻修改！！）
      */
     @PostMapping("/update")
     public Result<String> update(@RequestBody UserUpdateRequest request) {
-        log.info("【用户信息更新】收到请求: id={}", request.getId());
+        // 1. 获取当前登录用户的真实ID (这是从 Token 解析出来的，绝对可信)
+        String userIdStr = UserContext.getUserId();
+
+        if (userIdStr == null) {
+            return Result.error("4001", "未登录或Token失效");
+        }
+
+        // 假设数据库 ID 是 Integer 类型，这里需要转换一下
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        log.info("【用户信息更新】收到请求，操作人ID={}", currentUserId);
 
         UserEntity entity = new UserEntity();
-        entity.setId(request.getId()); // 更新必须有ID
+
+        // 【关键点】强制设置 ID 为当前登录用户 ID
+        // 无论前端传的 request.getId() 是多少，都覆盖掉，只改自己！
+        entity.setId(currentUserId);
+
         entity.setName(request.getName());
         entity.setPassword(request.getPassword());
         entity.setPhone(request.getPhone());
@@ -88,10 +107,10 @@ public class UserController {
 
         try {
             userDomainService.update(entity);
-            log.info("【用户信息更新】成功: id={}", request.getId());
+            log.info("【用户信息更新】成功: id={}", currentUserId);
             return Result.success("更新成功");
         } catch (Exception e) {
-            log.error("【用户信息更新】失败: id={}, cause={}", request.getId(), e.getMessage());
+            log.error("【用户信息更新】失败: id={}, cause={}", currentUserId, e.getMessage());
             return Result.error("4000", e.getMessage());
         }
     }

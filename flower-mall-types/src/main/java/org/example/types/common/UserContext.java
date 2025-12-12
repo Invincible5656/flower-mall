@@ -1,0 +1,22 @@
+package org.example.types.common;
+
+/**
+ * @author lanjiajun
+ * @description
+ * @create 2025-12-12 22:46
+ */
+public class UserContext {
+    private static final ThreadLocal<String> USER_ID = new ThreadLocal<>();
+
+    public static void setUserId(String userId) {
+        USER_ID.set(userId);
+    }
+
+    public static String getUserId() {
+        return USER_ID.get();
+    }
+
+    public static void remove() {
+        USER_ID.remove();
+    }
+}

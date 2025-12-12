@@ -23,6 +23,11 @@
             <groupId>org.example</groupId>
             <artifactId>flower-mall-domain</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

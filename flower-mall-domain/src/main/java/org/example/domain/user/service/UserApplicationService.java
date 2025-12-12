@@ -1,7 +1,9 @@
 package org.example.domain.user.service;
 
 import org.example.domain.user.model.entity.UserEntity;
+import org.example.domain.user.model.entity.UserLoginEntity;
 import org.example.domain.user.repository.IUserRepository;
+import org.example.types.util.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +25,13 @@ public class UserApplicationService {
     @Resource
     private IUserRepository userRepository;
 
+    @Resource
+    private JwtUtil jwtUtil;
+
     /**
      * 登录业务
      */
-    public UserEntity login(String account, String password, String role) {
+    public UserLoginEntity login(String account, String password, String role) {
         // 1. 通过仓储查询用户
         UserEntity user = userRepository.findByAccount(account);
 
@@ -45,7 +50,17 @@ public class UserApplicationService {
             throw new RuntimeException("密码错误");
         }
 
-        return user;
+        // 5. 生成 JWT Token
+        // 假设你的 createToken 方法接收 (userId, username)
+        // 注意：userId 转为 String
+        String token = jwtUtil.createToken(user.getId().toString(), user.getAccount());
+
+        // 6. 构建返回结果
+        // 注意：为了安全，返回给前端的用户信息最好不要包含 password
+        // 如果 UserEntity 不方便修改，可以在这里手动设为 null (仅影响返回的内存对象，不影响数据库)
+        user.setPassword(null);
+
+        return new UserLoginEntity(token, user);
     }
 
     /**
