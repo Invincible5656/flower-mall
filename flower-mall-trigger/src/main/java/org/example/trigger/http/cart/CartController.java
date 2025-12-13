@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 /**
  * @author lanjiajun
  * @description
+ * 当前逻辑是用户下单后全量清空购物车
+ * 暂时不支持勾选商品下单
  * @create 2025-12-11 14:20
  */
 @Slf4j
@@ -29,7 +31,7 @@ public class CartController {
      */
     @PostMapping("/add")
     public Result<Void> add(@RequestBody CartAddRequest request) {
-        // 1. 【核心修改】从 Token 上下文获取当前用户ID
+        // 1. 从 Token 上下文获取当前用户ID
         String userIdStr = UserContext.getUserId();
         if (userIdStr == null) return Result.error("4001", "未登录");
 
@@ -63,7 +65,7 @@ public class CartController {
      */
     @GetMapping("/list")
     public Result<CartAggregate> list() {
-        // 1. 【核心修改】直接获取当前用户ID
+        // 1. 直接获取当前用户ID
         String userIdStr = UserContext.getUserId();
         if (userIdStr == null) return Result.error("4001", "未登录");
 
@@ -80,4 +82,69 @@ public class CartController {
 
         return Result.success(cart);
     }
+
+    /**
+     * 更新数量
+     */
+    @PostMapping("/update")
+    public Result<Void> update(@RequestBody CartAddRequest request) {
+        String userIdStr = UserContext.getUserId();
+        if (userIdStr == null) return Result.error("4001", "未登录");
+
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        log.info(">>> 收到[更新购物车数量]请求: userId={}, flowerId={}, newCount={}",
+                currentUserId, request.getFlowerId(), request.getCount());
+
+        long start = System.currentTimeMillis();
+
+        try {
+            cartService.updateItemQuantity(
+                    currentUserId,
+                    request.getFlowerId(),
+                    request.getCount()
+            );
+            log.info("<<< [更新购物车数量]成功, 耗时: {}ms", System.currentTimeMillis() - start);
+            return Result.success();
+
+        } catch (Exception e) {
+            log.error("!!! [更新购物车数量]失败: userId={}, flowerId={}, cause={}",
+                    currentUserId, request.getFlowerId(), e.getMessage(), e);
+            return Result.error("500", "更新失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 删除购物车商品
+     */
+    @PostMapping("/delete")
+    public Result<Void> delete(@RequestBody CartAddRequest request) {
+        String userIdStr = UserContext.getUserId();
+        if (userIdStr == null) return Result.error("4001", "未登录");
+
+        Integer currentUserId = Integer.parseInt(userIdStr);
+
+        log.info(">>> 收到[删除购物车商品]请求: userId={}, flowerId={}",
+                currentUserId, request.getFlowerId());
+
+        long start = System.currentTimeMillis();
+
+        try {
+            cartService.removeCartItem(
+                    currentUserId,
+                    request.getFlowerId()
+            );
+            log.info("<<< [删除购物车商品]成功, 耗时: {}ms", System.currentTimeMillis() - start);
+            return Result.success();
+
+        } catch (Exception e) {
+            log.error("!!! [删除购物车商品]失败: userId={}, flowerId={}, cause={}",
+                    currentUserId, request.getFlowerId(), e.getMessage(), e);
+            return Result.error("500", "删除失败: " + e.getMessage());
+        }
+    }
+
+
+
+
 }

@@ -36,7 +36,7 @@
     <update id="updateItem" parameterType="org.example.infrastructure.dao.po.Cart">
         update carts
         set amount = #{amount},
-        price = #{price}  <!-- ✅ 加上这一行 -->
+        price = #{price}
         where id = #{id}
     </update>
 
@@ -44,4 +44,14 @@
     <delete id="deleteById">
         delete from carts where id = #{id}
     </delete>
+
+    <delete id="deleteAllItemsByCartId">
+        DELETE FROM carts WHERE id = #{id}
+    </delete>
+
+    <insert id="insertItem" parameterType="org.example.infrastructure.dao.po.Cart">
+        INSERT INTO cart_items (id, flower_id, amount, price)
+        VALUES (#{id}, #{fid}, #{amount}, #{price})
+    </insert>
+
 </mapper>

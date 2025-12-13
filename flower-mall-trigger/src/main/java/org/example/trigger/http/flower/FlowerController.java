@@ -78,7 +78,7 @@ public class FlowerController {
      * 删除鲜花
      */
     @AdminOnly
-    @PostMapping("/delete") // 或者用 @DeleteMapping("/{id}")
+    @DeleteMapping("/delete") // 或者用 @DeleteMapping("/{id}")
     public Result<Void> delete(@RequestParam Integer id) {
         log.info("接收到删除鲜花请求：{}", id);
         flowerApplicationService.deleteFlower(id);

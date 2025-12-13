@@ -25,4 +25,10 @@ public interface ICartDao {
 
     // 删除
     int deleteById(@Param("id") Integer id);
+
+    // 【新增】
+    void deleteAllItemsByCartId(Integer cartId);
+
+    // 【新增】
+    void insertItem(Cart item);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -25,28 +26,48 @@ public class CartRepositoryImpl implements ICartRepository {
     // 作用：把“聚合根对象”拆解，根据每一项的状态，决定是 Insert 还是 Update
     @Override
     public void save(CartAggregate cartAggregate) {
-        // 获取聚合根里的所有实体
-        List<CartItemEntity> items = cartAggregate.getItems();
+        List<CartItemEntity> currentItems = cartAggregate.getItems();
         Integer userId = cartAggregate.getUserId();
 
-        // 循环处理每一项
-        for (CartItemEntity item : items) {
-            // 1. 实体转 PO
-            Cart po = toPO(item, userId);
+        // 1. 先查出数据库里现有的数据，用于比对
+        List<Cart> dbList = cartDao.selectByUserId(userId);
+        // Key: 商品ID(Integer), Value: 购物车主键ID(Integer)
+        Map<Integer, Integer> dbMap = dbList.stream()
+                .collect(Collectors.toMap(Cart::getFid, Cart::getId));
 
-            // 2. 关键逻辑：根据是否有 ID 判断是新增还是更新
-            if (item.getId() == null) {
-                // --- 新增逻辑 ---
-                cartDao.insert(po);
+        // 2. 遍历当前内存里的新数据 (处理 新增 & 更新)
+        if (currentItems != null) {
+            for (CartItemEntity item : currentItems) {
+                // 【修改点】：item.getFlowerId() 现在应该返回 Integer
+                // 检查数据库里是否已经有这个商品
+                if (dbMap.containsKey(item.getFlowerId())) {
+                    // A. 如果有：说明是【更新】
+                    Integer existingId = dbMap.get(item.getFlowerId());
+                    item.initId(existingId); // 确保实体有 ID
 
-                // ！！关键步骤！！
-                // 数据库生成了 ID (比如 101)，必须回填给 Domain 实体
-                // 否则这一次请求还没结束，业务层如果再用这个实体，ID 还是 null
-                item.initId(po.getId());
-            } else {
-                // --- 更新逻辑 ---
-                cartDao.updateItem(po);
+                    // 从 Map 中移除，剩下的就是待删除的
+                    dbMap.remove(item.getFlowerId());
+                }
+
+                // 转 PO
+                Cart po = toPO(item, userId);
+
+                // 执行数据库操作
+                if (item.getId() == null) {
+                    // --- 新增 ---
+                    cartDao.insert(po);
+                    item.initId(po.getId()); // 回填 ID
+                } else {
+                    // --- 更新 ---
+                    cartDao.updateItem(po);
+                }
             }
+        }
+        // 3. 处理被删除的数据
+        // 此时 dbMap 里剩下的，就是“数据库里有，但当前 items 里没有”的数据
+        // 就是用户点击“删除”的商品
+        for (Integer idToDelete : dbMap.values()) {
+            cartDao.deleteById(idToDelete);
         }
     }
 
