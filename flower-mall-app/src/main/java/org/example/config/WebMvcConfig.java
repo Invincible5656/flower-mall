@@ -26,7 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**") // 拦截所有路径
                 .excludePathPatterns(
                         "/api/user/login",     // 排除登录
-                        "/api/user/register",  // 排除注册
+                        "/api/user/create", // 排除注册
                         "/api/flower/list",      // 查看商品不需要登录
                         "/api/species/list"
                 );

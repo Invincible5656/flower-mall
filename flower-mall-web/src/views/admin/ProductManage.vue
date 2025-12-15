@@ -2,9 +2,33 @@
   <div class="admin-container">
     <div class="header">
       <h2>商品管理后台</h2>
-      <!-- 上架按钮 -->
-      <el-button type="primary" @click="openDialog">上架新商品</el-button>
+      <div>
+        <el-button type="info" plain icon="House" @click="$router.push('/')">
+          去商城首页
+        </el-button>
+        <!-- 新增：跳往订单管理 -->
+        <el-button type="primary" @click="openDialog">上架新商品</el-button>
+        <el-button @click="$router.push('/admin/orders')">去管理订单</el-button>
+        <el-button @click="$router.push('/admin/species')">分类管理</el-button>
+
+      </div>
+
     </div>
+
+    <el-row :gutter="20" style="margin-bottom: 20px;">
+      <el-col :span="6">
+        <el-card shadow="hover" class="stat-card">
+          <div class="stat-title">💰 总销售额</div>
+          <div class="stat-value sales">￥{{ Number(stats.sales).toFixed(2) }}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="6">
+        <el-card shadow="hover" class="stat-card">
+          <div class="stat-title">📦 总订单数</div>
+          <div class="stat-value orders">{{ stats.orders }} 单</div>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <!-- 商品表格 -->
     <el-table :data="tableData" style="width: 100%; margin-top: 20px" border stripe>
@@ -58,23 +82,50 @@
   </div>
 </template>
 
+<style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+</style>
+
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { getFlowerList, addFlower, deleteFlower } from '@/api/flower'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { getSalesStats } from '@/api/order'
 
 const tableData = ref([])
 const dialogVisible = ref(false)
 
+const stats = reactive({
+  sales: 0,
+  orders: 0
+})
+
+const loadStats = async () => {
+  try {
+    const res = await getSalesStats()
+    stats.sales = res.sales || 0
+    stats.orders = res.orders || 0
+  } catch (e) {
+    console.error('加载统计失败', e)
+  }
+}
+
 // 表单数据
 const form = reactive({
   name: '',
-  // speciesId: 1,  <-- 删掉这个
-  speciesName: '',  // ✅ 新增：后端要的是名字（如"玫瑰"）
+  speciesName: '',
   price: 99.00,
-  stock: 100,       // 后端JSON里没体现库存，建议保留，万一后端DTO里有呢？如果没有也不会报错
-  // description: '', <-- 删掉这个
-  detail: '',       // ✅ 新增：后端要的是 detail
+  stock: 100,
+  detail: '',
   imageUrl: ''
 })
 
@@ -129,6 +180,7 @@ const handleDelete = (row) => {
 // 页面加载时自动拉取数据
 onMounted(() => {
   loadData()
+  loadStats()
 })
 </script>
 
@@ -141,4 +193,19 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
 }
+.stat-card {
+  text-align: center;
+  background-color: #fcfcfc;
+}
+.stat-title {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 10px;
+}
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+.sales { color: #f56c6c; } /* 红色 */
+.orders { color: #409eff; } /* 蓝色 */
 </style>

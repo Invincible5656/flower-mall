@@ -1,6 +1,7 @@
 package org.example.domain.order.model.aggregate;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.domain.order.model.entity.OrderItemEntity;
 import org.example.domain.order.model.valobj.OrderStatusVO;
 
@@ -24,6 +25,8 @@ public class OrderAggregate {
     // 业务属性
     private Integer userId;
     private Float totalAmount;
+
+    @Setter
     private OrderStatusVO status; // 使用值对象，而不是简单的 int
     private List<OrderItemEntity> items;
 
@@ -36,7 +39,8 @@ public class OrderAggregate {
     private LocalDateTime createTime;
 
     // 构造函数设为 private，强制通过工厂创建
-    private OrderAggregate() {}
+    private OrderAggregate() {
+    }
 
     public static OrderAggregate reconstruct(
             Long id, String orderId, Integer userId, Float totalAmount,

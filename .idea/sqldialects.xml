@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/flower-mall-app/src/main/resources/mybatis/mapper/FlowerMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/flower-mall-app/src/main/resources/mybatis/mapper/OrderMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/flower-mall-app/src/main/resources/mybatis/mapper/UserMapper.xml" dialect="GenericSQL" />
   </component>
 </project>

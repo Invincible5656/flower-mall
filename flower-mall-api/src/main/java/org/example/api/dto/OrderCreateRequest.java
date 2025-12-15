@@ -18,4 +18,5 @@ public class OrderCreateRequest {
     private String receiverName;
     private String receiverPhone;
     private String address;
+    private String email; // 本次订单的通知邮箱
 }

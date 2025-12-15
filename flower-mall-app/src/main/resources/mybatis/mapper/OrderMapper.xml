@@ -45,13 +45,45 @@
     </insert>
 
     <!-- 查询主表 -->
+    <!-- 根据订单号查询单个主订单 -->
     <select id="selectByOrderId" resultMap="OrderResultMap">
         SELECT * FROM orders WHERE order_id = #{orderId}
     </select>
 
-    <!-- 查询子表 -->
-    <select id="selectItemsByOrderId" resultMap="OrderItemResultMap">
-        SELECT * FROM order_items WHERE order_id = #{orderId}
+    <!-- 管理员：查询所有订单 -->
+    <select id="selectAll" resultMap="OrderResultMap">
+        SELECT * FROM orders
+        ORDER BY create_time DESC
     </select>
 
+    <select id="selectItemsByOrderId" resultMap="OrderItemResultMap">
+        SELECT * FROM order_items
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="selectByUserId" resultMap="OrderResultMap">
+        SELECT * FROM orders
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 统计订单总数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM orders
+    </select>
+    <!-- 统计总金额：只统计有效订单 (已发货/已完成) -->
+    <select id="sumTotalPriceByStatus" resultType="java.math.BigDecimal">
+        SELECT SUM(total_amount)
+        FROM orders
+        WHERE status IN
+        <foreach collection="statusList" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <update id="updateStatus">
+        UPDATE orders
+        SET status = #{status}
+        WHERE order_id = #{orderId}
+    </update>
 </mapper>

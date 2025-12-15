@@ -13,10 +13,9 @@ const router = createRouter({
             path: '/',
             name: 'Home',
             component: () => import('../views/Home.vue'),
-            // 【重点1】给首页打上标记：这个页面必须登录才能看！
-            // (通常首页是公开的，但为了测试你的跳转逻辑，我们先强制它需要登录)
             meta: { requiresAuth: true }
         },
+
         //购物车
         {
             path: '/cart',
@@ -24,6 +23,21 @@ const router = createRouter({
             component: () => import('../views/Cart.vue'),
             meta: { requiresAuth: true } // 必须登录
         },
+
+        //注册
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import('../views/Register.vue')
+        },
+
+        {
+            path: '/my-orders',
+            name: 'MyOrders',
+            component: () => import('../views/MyOrders.vue'),
+            meta: { requiresAuth: true }
+        },
+
         {
             path: '/admin',
             name: 'Admin',
@@ -38,6 +52,20 @@ const router = createRouter({
                         requiresAuth: true,
                         role: 'admin'  // 【重要】标记只有 admin 能进
                     }
+                },
+
+                {
+                    path: 'species',
+                    name: 'SpeciesManage',
+                    component: () => import('../views/admin/SpeciesManage.vue'),
+                    meta: { requiresAuth: true, role: 'admin' }
+                },
+
+                {
+                    path: 'orders', // 访问路径: /admin/orders
+                    name: 'OrderManage',
+                    component: () => import('../views/admin/OrderManage.vue'),
+                    meta: { requiresAuth: true, role: 'admin' }
                 }
             ]
         }

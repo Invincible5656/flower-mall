@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.example.infrastructure.dao.po.Order;
 import org.example.infrastructure.dao.po.OrderItem;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -25,4 +26,14 @@ public interface IOrderDao {
 
     // 根据业务订单号查询所有订单项
     List<OrderItem> selectItemsByOrderId(@Param("orderId") String orderId);
+
+    List<Order> selectAll();
+
+    List<Order> selectByUserId(Integer userId);
+
+    void updateStatus(@Param("orderId") String orderId, @Param("status") Integer status);
+
+    Integer count();
+
+    BigDecimal sumTotalPriceByStatus(List<Integer> statusList);
 }

@@ -24,6 +24,12 @@
         <el-form-item>
           <el-button type="primary" @click="handleLogin" :loading="loading">登录</el-button>
         </el-form-item>
+
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: #999">测试管理员账号: testadmin001 / 123456</span>
+          <span style="color: #999">测试用户账号: testuser001 / 123</span>
+          <el-link type="primary" @click="$router.push('/register')">注册新账号</el-link>
+        </div>
       </el-form>
     </el-card>
   </div>
@@ -70,8 +76,14 @@ const handleLogin = async () => {
 
     ElMessage.success('登录成功')
 
-    // 3. 跳转
-    router.push('/')
+    // 3. 根据角色跳不同的地方
+    if (res.userInfo.role === 'admin') {
+      // 如果是管理员，直接去后台
+      router.push('/admin/products')
+    } else {
+      // 普通用户去首页
+      router.push('/')
+    }
 
   } catch (error) {
     console.error(error)

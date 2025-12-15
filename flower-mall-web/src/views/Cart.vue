@@ -80,6 +80,9 @@
         <el-form-item label="地址">
           <el-input v-model="orderForm.address" type="textarea" placeholder="请填写详细地址"/>
         </el-form-item>
+        <el-form-item label="通知邮箱">
+          <el-input v-model="orderForm.email" placeholder="接收发货通知" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -93,13 +96,15 @@
 import { ref, computed, onMounted } from 'vue'
 import request from '@/utils/request'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import router from "@/router/index.js";
 
 const cartItems = ref([])
 const dialogVisible = ref(false)
 const orderForm = ref({
   receiverName: '',
   receiverPhone: '',
-  address: ''
+  address: '',
+  email: ''
 })
 
 // 1. 查询购物车
@@ -194,6 +199,8 @@ const submitOrder = async () => {
     ElMessage.success('下单成功！')
     dialogVisible.value = false
     await loadCart() // 刷新（清空）
+    // 【体验优化】：下单成功后，直接跳转到“我的订单”页面
+    router.push('/my-orders')
   } catch (e) {}
 }
 

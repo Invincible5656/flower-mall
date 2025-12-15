@@ -4,7 +4,34 @@
     <div class="nav-bar">
       <h2>🌸 鲜花商城</h2>
       <div class="right-menu">
-        <el-button type="success" icon="ShoppingCart" @click="$router.push('/cart')">我的购物车</el-button>
+        <!-- 新增：我的订单按钮 -->
+        <el-button
+            v-if="isAdmin"
+            type="warning"
+            icon="Setting"
+            @click="$router.push('/admin/products')"
+            style="margin-right: 10px;"
+        >
+          后台管理
+        </el-button>
+        <el-button
+            type="primary"
+            plain
+            icon="List"
+            @click="$router.push('/my-orders')"
+        >
+          我的订单
+        </el-button>
+
+        <!-- 之前的购物车按钮 -->
+        <el-button
+            type="success"
+            icon="ShoppingCart"
+            @click="$router.push('/cart')"
+        >
+          我的购物车
+        </el-button>
+
         <el-button type="danger" @click="handleLogout">退出</el-button>
       </div>
     </div>
@@ -44,6 +71,7 @@ import { ShoppingCart, Plus } from '@element-plus/icons-vue' // 记得导入图�
 
 const router = useRouter()
 const flowerList = ref([])
+const isAdmin = ref(false)
 
 // 1. 加载商品
 const loadFlowers = async () => {
@@ -85,7 +113,13 @@ const handleLogout = () => {
 }
 
 onMounted(() => {
-  loadFlowers()
+  loadFlowers() // 原有的加载商品
+
+  // 【新增】检查是否是管理员
+  const role = localStorage.getItem('USER_ROLE')
+  if (role === 'admin') {
+    isAdmin.value = true
+  }
 })
 </script>
 
