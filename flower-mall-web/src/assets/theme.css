@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    background-color: #f5f5f7 !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+:root {
+    --el-color-primary: #0071e3 !important; /* 苹果官网蓝 */
+    --el-color-success: #34c759 !important; /* iOS 绿色 */
+    --el-color-warning: #ff9f0a !important;
+    --el-color-danger: #ff3b30 !important;
+    --el-border-radius-base: 12px !important; /* 基础圆角变大 */
+    --el-border-radius-small: 8px !important;
+}
+
+.el-card {
+    border: none !important;
+    border-radius: 20px !important; /* 大圆角 */
+    background-color: rgba(255, 255, 255, 0.8) !important; /* 轻微透明 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important; /* 极轻的阴影 */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.el-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.el-button {
+    border-radius: 999px !important; /* 胶囊圆角 */
+    font-weight: 500 !important;
+    transition: transform 0.1s ease;
+}
+
+.el-button:active {
+    transform: scale(0.96); /* 点击时的微缩反馈 */
+}
+
+.el-button--primary {
+    background: linear-gradient(135deg, #0071e3, #47a1ff) !important;
+    border: none !important;
+}
+
+.el-dialog {
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.75) !important; /* 半透明白色 */
+    backdrop-filter: blur(20px) !important; /* 毛玻璃模糊 */
+    -webkit-backdrop-filter: blur(20px) !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.el-dialog__title {
+    font-weight: 600;
+    color: #1d1d1f;
+}
+
+.el-input__wrapper {
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    background-color: #f0f0f2 !important; /* 浅灰底色 */
+    transition: all 0.3s ease;
+}
+
+.el-input__wrapper:focus-within {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.3) !important; /* 聚焦时的蓝色光晕 */
+}
+
+.el-table {
+    border-radius: 16px;
+    overflow: hidden;
+    --el-table-header-bg-color: #f5f5f7;
+}
+.el-table th {
+    font-weight: 600;
+    color: #86868b;
+}

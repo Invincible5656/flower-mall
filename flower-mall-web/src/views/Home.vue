@@ -42,7 +42,7 @@
         <el-col :span="6" v-for="item in flowerList" :key="item.id" style="margin-bottom: 20px;">
           <el-card :body-style="{ padding: '0px' }" shadow="hover">
             <!-- 图片 -->
-            <img :src="item.imageUrl" class="image" alt="鲜花图片" />
+            <img :src="item.imgGuid" class="image" alt="鲜花图片" />
             <div style="padding: 14px">
               <!-- 标题和价格 -->
               <div class="title">{{ item.name }}</div>
@@ -128,12 +128,24 @@ onMounted(() => {
   padding: 20px 50px;
 }
 .nav-bar {
+  /* 固定在顶部 */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  /* 毛玻璃效果 */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  /* 边框和间距 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 15px 20px; /* 调整内边距 */
+  margin: -20px -50px 30px -50px; /* 抵消掉 container 的 padding，让它通栏 */
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
 }
 .image {
   width: 100%;

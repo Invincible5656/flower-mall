@@ -34,7 +34,9 @@
             <template #default="scope">￥{{ scope.row.price }}</template>
           </el-table-column>
           <el-table-column prop="count" label="数量" width="80">
-            <template #default="scope">x {{ scope.row.count }}</template>
+            <template #default="scope">
+              x {{ scope.row.quantity }}
+            </template>
           </el-table-column>
         </el-table>
 
@@ -70,14 +72,22 @@ const loadOrders = async () => {
 
 // 辅助函数：状态转换
 const getStatusText = (status) => {
-  // 假设后端: 1-待发货, 2-已发货, 3-已完成
-  const map = { 1: '待发货', 2: '已发货', 3: '已完成' }
-  return map[status] || '未知状态'
+  // 这里的 status 是字符串，如 "WAIT_PAY"
+  const map = {
+    'WAIT_PAY': '待付款',  // 对应 0
+    'WAIT_SHIP': '待发货', // 对应 1
+    'SHIPPED': '已发货',   // 对应 2
+    'FINISHED': '已完成',  // 对应 3
+    'CLOSED': '已关闭'
+  }
+  return map[status] || status // 如果匹配不到，就直接显示英文
 }
+
 const getStatusType = (status) => {
-  if (status === 2) return 'success'
-  if (status === 3) return 'info'
-  return 'warning' // 待发货
+  if (status === 'SHIPPED') return 'success'   // 绿色
+  if (status === 'FINISHED') return 'info'     // 灰色
+  if (status === 'WAIT_PAY') return 'danger'   // 红色
+  return 'warning'                             // 橙色 (待发货)
 }
 
 onMounted(() => {
