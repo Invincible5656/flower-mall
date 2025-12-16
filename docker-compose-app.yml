@@ -23,7 +23,7 @@ services:
     container_name: flower-frontend
     restart: always
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       # 1. 挂载前端打包文件 (请确认 dist 文件夹在这里)
       - ./flower-mall-web/dist:/usr/share/nginx/html
