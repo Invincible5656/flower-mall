@@ -41,6 +41,5 @@ services:
 # === 网络配置 ===
 networks:
   my-network:
-    driver: bridge
     external: true
     name: release_my-network
