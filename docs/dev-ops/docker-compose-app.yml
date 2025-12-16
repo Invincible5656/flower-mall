@@ -42,3 +42,5 @@ services:
 networks:
   my-network:
     driver: bridge
+    external: true
+    name: release_my-network
