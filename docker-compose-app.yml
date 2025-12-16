@@ -8,19 +8,22 @@ services:
     restart: always
     ports:
       - "8091:8080"
+    dns:
+      - 223.5.5.5    # 阿里云 DNS
     environment:
       - TZ=Asia/Shanghai
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/DB_flower?useUnicode=true&characterEncoding=utf-8&useSSL=false
       - SPRING_DATASOURCE_PASSWORD=123456
       - SPRING_REDIS_HOST=redis
       -  SERVER_PORT=8080
+
       - SPRING_MAIL_HOST=smtp.qq.com
-        - SPRING_MAIL_PORT=465
-        - SPRING_MAIL_USERNAME=283603198@qq.com
-        - SPRING_MAIL_PASSWORD=bqvjsfeumzmjbhae
-        - SPRING_MAIL_PROTOCOL=smtps
-        
-        - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=true
+      - SPRING_MAIL_PORT=465
+      - SPRING_MAIL_USERNAME=283603198@qq.com
+      - SPRING_MAIL_PASSWORD=bqvjsfeumzmjbhae
+      - SPRING_MAIL_PROTOCOL=smtps
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     networks:
       - my-network
 
