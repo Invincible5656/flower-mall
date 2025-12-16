@@ -35,5 +35,5 @@ public interface IOrderDao {
 
     Integer count();
 
-    BigDecimal sumTotalPriceByStatus(List<Integer> statusList);
+    BigDecimal sumTotalPriceByStatus(@Param("statusList") List<Integer> statusList);
 }
