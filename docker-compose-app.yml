@@ -29,8 +29,8 @@ services:
       - ./flower-mall-web/dist:/usr/share/nginx/html
       
       # 2. 挂载 Nginx 配置文件 (根据你的实际路径 docs/nginx/nginx.conf)
-      - ./docs/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      
+      - ./docs/dev-ops/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
       # 3. 挂载图片目录 (可选，如果有的话)
       - ./flower-mall-web/public/images:/usr/share/nginx/html/images
     depends_on:
